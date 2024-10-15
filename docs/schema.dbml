@@ -1,0 +1,14 @@
+Table Restaurant {
+  id    Int     [pk, increment]
+  name  String
+}
+
+Table Reservation {
+  id        Int [pk, increment]
+  name      String
+  email     String
+  partySize Int
+  restaurantId  Int
+}
+
+Ref: Restaurant.id < Reservation.restaurantId
