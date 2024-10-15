@@ -1,6 +1,27 @@
 const prisma = require("../prisma");
 const seed = async () => {
-  // TODO: Create 3 restaurants with 5 reservations each
+  // A loop must be used because `prisma.restaurant.createMany` fails here
+  for (let i = 0; i < 3; i++) {
+    // For each restaurant, create an array of 5 reservations
+    const reservations = [];
+    for (let j = 0; j < 5; j++) {
+      reservations.push({
+        name: `Person ${i}${j}`,
+        email: `${i}${j}@foo.bar`,
+        partySize: Math.floor(Math.random() * 10) + 1,
+      });
+    }
+
+    // Create a single restaurant with nested reservations
+    await prisma.restaurant.create({
+      data: {
+        name: `Restaurant ${i + 1}`,
+        reservations: {
+          create: reservations,
+        },
+      },
+    });
+  }
 };
 seed()
   .then(async () => await prisma.$disconnect())
